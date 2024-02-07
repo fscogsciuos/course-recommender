@@ -1,23 +1,43 @@
-# Backend
+# Backend Setup
 
-## How to start the backend
+## Starting the Backend
 
-    DSN=<your postgres dsn> go run server.go
+To start the backend, use the following command where `<your_postgres_dsn>` is replaced with your actual PostgreSQL DSN:
 
-Before you do that you must install Docker and of course Go. Then to start up the database, you can run `docker compose up -d`. This spins up a Postgres database. Now you need to manually (for now) connect to the database, and run the migrations. You can find the migrations in [/internal/db/migrations](./internal/db/migrations).
+```sh
+DSN=<your_postgres_dsn> go run server.go
+```
 
-If you are using GoLand (recommended) you can use the [EnvFile](https://plugins.jetbrains.com/plugin/7861-envfile) plugin to auto bind the env variables from you .env file. For that, just edit your run configuration, add a go build and there you should see an extra tap (EnvFile) where you can point to an env file (.env). Just copy `.env.example` to `.env`.
+Before running this command, ensure that both Docker and Go are installed on your system. To initiate the PostgreSQL database, execute:
 
-## Development
+```sh
+docker compose up -d
+```
 
-We use `gqlgen` for our graphql server. It auto generates Go code for you based on your graphql schema definitions. 
+This command will set up a Postgres database container. Following that, you are required to connect to the database and execute the migration scripts which can be found in the directory: [/internal/db/migrations](./internal/db/migrations).
 
-Everytime you change the GraphQL schema, you can have to regenerate your resolvers etc. To do that, just run:
+For those using GoLand (which is recommended for this project) to develop, you can utilize the [EnvFile](https://plugins.jetbrains.com/plugin/7861-envfile) plugin. This plugin simplifies the process of binding environment variables from your `.env` file to the application. To configure this, edit your run configuration, add a Go build task, and in the 'EnvFile' tab, link to your `.env` file by copying the contents from `.env.example` into a new `.env` file.
 
-    go run github.com/99designs/gqlgen generate
+## Development Instructions
 
-We use `sqlc` to generate based on our 
+### GraphQL Generation with gqlgen
 
-Everytime you adjust or add sql queries, you have to run:
+For our GraphQL server, we employ `gqlgen`. This tool automatically generates Go code according to your GraphQL schema definitions.
 
-    sqlc generate
+When you make changes to the GraphQL schema, you will need to regenerate the associated resolvers and related code. To do so, run the following command:
+
+```sh
+go run github.com/99designs/gqlgen generate
+```
+
+### Code Generation with sqlc
+
+We use `sqlc` for generating code based on our SQL queries.
+
+If you modify or introduce new SQL queries, execute the command below to regenerate the necessary code:
+
+```sh
+sqlc generate
+```
+
+Make sure to run this whenever you make changes to ensure the database interactions are up to date.
